@@ -1,0 +1,445 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>Pro Image Compressor</title>
+
+<link rel="stylesheet" href="style.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/exif-js/2.3.0/exif.min.js"></script>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- ================= HEADER ================= -->
+
+<header>
+
+<div class="logoArea">
+
+<div class="logo">
+
+<i class="fa-solid fa-file-image"></i>
+
+</div>
+
+<div>
+
+<h1>
+
+Pro <span>Image Compressor</span>
+
+</h1>
+
+<p>
+
+<span>● Exact</span>
+
+<span>● Max</span>
+
+<span>● Percentage</span>
+
+<span>● Large File Safe</span>
+
+<span>● EXIF Fixed</span>
+
+</p>
+
+</div>
+
+</div>
+
+<div class="headerButtons">
+
+<button id="themeBtn">
+
+<i class="fa-regular fa-moon"></i>
+
+Theme
+
+</button>
+
+<button class="primary">
+
+<i class="fa-regular fa-circle-question"></i>
+
+Help
+
+</button>
+
+</div>
+
+</header>
+
+<!-- ================= UPLOAD ================= -->
+
+<section class="uploadCard">
+
+<input
+type="file"
+id="file"
+accept="image/*"
+multiple
+hidden>
+
+<div id="drop" class="dropZone">
+
+<div class="uploadIcon">
+
+<i class="fa-solid fa-cloud-arrow-up"></i>
+
+</div>
+
+<h2>
+
+Drag & Drop Images Here
+
+</h2>
+
+<p>
+
+or Click to Select
+
+</p>
+
+<button id="selectBtn">
+
+<i class="fa-regular fa-folder-open"></i>
+
+Select Images
+
+</button>
+
+</div>
+
+</section>
+
+<!-- ================= CONTENT ================= -->
+
+<section class="dashboard">
+
+<!-- LEFT -->
+
+<div class="card">
+
+<div class="cardHeader">
+
+<div>
+
+<i class="fa-solid fa-folder-open"></i>
+
+Added Files
+
+<span id="fileCount">(0)</span>
+
+</div>
+
+<button class="danger" id="clearAll">
+
+<i class="fa-regular fa-trash-can"></i>
+
+Clear All
+
+</button>
+
+</div>
+
+<div id="fileList">
+
+</div>
+
+</div>
+
+<!-- RIGHT -->
+
+<div class="card">
+
+<div class="cardHeader">
+
+<i class="fa-solid fa-gear"></i>
+
+Compression Settings
+
+</div>
+
+<div class="settings">
+
+<div class="field">
+
+<label>Size Mode</label>
+
+<select id="sizeMode">
+
+<option value="exact">Exact Size</option>
+
+<option value="max">Maximum Size</option>
+
+<option value="ratio">Percentage</option>
+
+</select>
+
+</div>
+
+<div class="field">
+
+<label>Value</label>
+
+<input
+type="number"
+id="globalTarget"
+value="200">
+
+</div>
+
+<div class="field">
+
+<label>Unit</label>
+
+<select id="unit">
+
+<option>KB</option>
+
+<option>MB</option>
+
+</select>
+
+</div>
+
+<div class="field">
+
+<label>Resize</label>
+
+<select id="resizeMode">
+
+<option value="none">
+
+No Resize
+
+</option>
+
+<option value="percent">
+
+Resize %
+
+</option>
+
+<option value="pixel">
+
+Resize Width
+
+</option>
+
+<option value="wh">
+
+Width × Height
+
+</option>
+
+</select>
+
+</div>
+
+<div class="field">
+
+<label>Value</label>
+
+<input
+id="resizeValue"
+type="number">
+
+</div>
+
+<div class="field">
+
+<label>Width</label>
+
+<input
+id="resizeWidth"
+type="number">
+
+</div>
+
+<div class="field">
+
+<label>Height</label>
+
+<input
+id="resizeHeight"
+type="number">
+
+</div>
+
+<div class="field checkbox">
+
+<label>
+
+<input
+id="lockRatio"
+type="checkbox"
+checked>
+
+Lock Aspect Ratio
+
+</label>
+
+</div>
+
+<div class="field full">
+
+<label>
+
+Output Format
+
+</label>
+
+<select id="compressMode">
+
+<option value="exact">
+
+PNG → JPG
+
+</option>
+
+<option value="png">
+
+Keep PNG
+
+</option>
+
+</select>
+
+</div>
+
+<div class="buttons">
+
+<button
+id="startBtn"
+class="primary">
+
+<i class="fa-solid fa-rocket"></i>
+
+Start Compression
+
+</button>
+
+<button
+id="zipBtn"
+class="success">
+
+<i class="fa-solid fa-download"></i>
+
+Download ZIP
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ================= PROGRESS ================= -->
+
+<section class="progressCard">
+
+<div class="progressTitle">
+
+<div>
+
+Ready to Compress
+
+</div>
+
+<div id="progressText">
+
+0%
+
+</div>
+
+</div>
+
+<div class="progress">
+
+<div id="bar">
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ================= RESULTS ================= -->
+
+<section class="card">
+
+<div class="cardHeader">
+
+<i class="fa-solid fa-image"></i>
+
+Compressed Images
+
+<span id="resultCount">
+
+(0)
+
+</span>
+
+</div>
+
+<div id="list" class="resultsGrid">
+
+</div>
+
+</section>
+
+<footer>
+
+<div>
+
+<i class="fa-solid fa-shield-halved"></i>
+
+Your files are processed in your browser.
+
+No uploads.
+
+100% Private.
+
+</div>
+
+<div>
+
+Made with ❤️ for faster compression
+
+</div>
+
+</footer>
+
+</div>
+
+<script src="compressor.js"></script>
+
+<script src="app.js"></script>
+
+</body>
+
+</html>
