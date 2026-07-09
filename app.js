@@ -1,4 +1,4 @@
-﻿/*==========================================================
+/*==========================================================
     PRO IMAGE COMPRESSOR
     app.js
     PART 1
@@ -21,7 +21,7 @@ const resultCount = document.getElementById("resultCount");
 const startBtn = document.getElementById("startBtn");
 const zipBtn = document.getElementById("zipBtn");
 const clearBtn = document.getElementById("clearAll");
-
+const pdfBtn = document.getElementById("pdfBtn");
 const progressBar = document.getElementById("bar");
 const progressText = document.getElementById("progressText");
 
@@ -112,6 +112,7 @@ function bindEvents(){
     /* Theme */
 
     themeBtn.addEventListener("click",toggleTheme);
+pdfBtn.addEventListener("click",downloadPDF);
 
 }
 
@@ -871,6 +872,90 @@ async function downloadZIP(){
 
 }
 
+async function downloadPDF(){
+
+    if(results.length===0){
+
+        toast("No compressed images available.","error");
+        return;
+
+    }
+
+    const { jsPDF } = window.jspdf;
+
+    const pdf = new jsPDF({
+
+        orientation:"portrait",
+        unit:"mm",
+        format:"a4"
+
+    });
+
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+
+    for(let i=0;i<results.length;i++){
+
+        const item = results[i];
+
+        const blob = item.blob || item.file || item.output;
+
+        if(!blob) continue;
+
+        const url = URL.createObjectURL(blob);
+
+        const img = await new Promise(resolve=>{
+
+            const image = new Image();
+
+            image.onload=()=>resolve(image);
+
+            image.src=url;
+
+        });
+
+        if(i>0){
+
+            pdf.addPage();
+
+        }
+
+        const margin = 10;
+
+        const maxW = pageWidth - margin*2;
+        const maxH = pageHeight - margin*2;
+
+        const scale = Math.min(
+
+            maxW/img.width,
+            maxH/img.height
+
+        );
+
+        const w = img.width*scale;
+        const h = img.height*scale;
+
+        const x = (pageWidth-w)/2;
+        const y = (pageHeight-h)/2;
+
+        pdf.addImage(
+
+            img,
+            "JPEG",
+            x,
+            y,
+            w,
+            h
+
+        );
+
+        URL.revokeObjectURL(url);
+
+    }
+
+    pdf.save("Compressed_Images.pdf");
+
+}
 /* ================================
    STATISTICS
 ================================ */
