@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -22,7 +22,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/exif-js/2.3.0/exif.min.js"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 
 <body>
@@ -330,25 +330,20 @@ Keep PNG
 
 <div class="buttons">
 
-<button
-id="startBtn"
-class="primary">
+    <button id="startBtn" class="primary">
+        <i class="fa-solid fa-rocket"></i>
+        Start Compression
+    </button>
 
-<i class="fa-solid fa-rocket"></i>
+    <button id="zipBtn" class="success">
+        <i class="fa-solid fa-file-zipper"></i>
+        Download ZIP
+    </button>
 
-Start Compression
-
-</button>
-
-<button
-id="zipBtn"
-class="success">
-
-<i class="fa-solid fa-download"></i>
-
-Download ZIP
-
-</button>
+    <button id="pdfBtn" class="danger">
+        <i class="fa-solid fa-file-pdf"></i>
+        Download PDF
+    </button>
 
 </div>
 
